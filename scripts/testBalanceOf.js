@@ -7,18 +7,19 @@
 const hre = require("hardhat");
 
 async function main() {
-  
-  // To determine initial supply multiply by 18 decimals based on Ethereum
-  const initialSupply = hre.ethers.utils.parseEther(`${1_000_000}`)
 
+    const address = `0x1563C040b5fa86fFAfBdeB17723de88EcBCEd24E`
+    const wallet = `0xA57100ab84701e890e0b707262D2b0da6F66dB6C`
+
+  // try to retrieve balance of DUSD from EOD wallet 
   try {
 
     const DUSDFactory = await hre.ethers.getContractFactory("DUSD");
-    const DUSD = await DUSDFactory.deploy(`${initialSupply}`);
-    await DUSD.deployed();
+    const instance = DUSDFactory.attach(address)
 
-    // latest deployed contract address is 0x1563C040b5fa86fFAfBdeB17723de88EcBCEd24E
-    console.log(`Successfully deployed to contract address: ${DUSD.address}`);
+    let balance = await instance.balanceOf(`${wallet}`)
+
+   console.log(hre.ethers.utils.formatEther(balance))
   } catch (err) {
     console.error(err);
   }
