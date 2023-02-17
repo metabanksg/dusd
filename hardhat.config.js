@@ -1,27 +1,31 @@
-require("@nomicfoundation/hardhat-toolbox")
+require('@nomicfoundation/hardhat-toolbox')
 require('dotenv').config()
 
 module.exports = {
   solidity: {
-    version: "0.8.17",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 9999
-      }
-    }
+    compilers: [
+      { version: '0.6.10' },
+      {
+        version: '0.8.17',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 9999,
+          },
+        },
+      },
+    ],
   },
   networks: {
     goerli: {
       url: process.env.GOERLI_URL,
-      accounts:
-        [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: true,
     currency: 'USD',
-    token: 'ETH'
+    token: 'ETH',
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,

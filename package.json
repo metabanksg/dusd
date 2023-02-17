@@ -6,16 +6,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["DUSD", "ethereum", "tron", "MetaBank"],
+  "keywords": [
+    "DUSD",
+    "ethereum",
+    "tron",
+    "MetaBank"
+  ],
   "author": "MetaBank SG",
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "@openzeppelin/contracts": "^3.4.2",
     "hardhat": "^2.12.7"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.8.1",
     "dotenv": "^16.0.3"
   }
 }
