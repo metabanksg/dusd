@@ -14,17 +14,6 @@ module.exports = {
         },
       },
     ],
-    overrides: {
-      'contracts/DUSD.sol': {
-        version: '0.8.17',
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 9999,
-          },
-        },
-      },
-    },
   },
   networks: {
     goerli: {
@@ -39,5 +28,8 @@ module.exports = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  paths: {
+    sources: './contracts/src',
   },
 }

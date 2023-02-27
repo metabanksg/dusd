@@ -9,8 +9,8 @@ pragma solidity 0.6.10;
  * @custom:experimental Version 1.0
  */
 
-import "@openzeppelinv3/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelinv3/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DUSD is ERC20, Ownable {
 
