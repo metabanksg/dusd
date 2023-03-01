@@ -17,7 +17,7 @@
   "private": true,
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
-    "@openzeppelin/contracts": "^3.4.2",
+    "@openzeppelin/contracts": "^2.5.1",
     "hardhat": "^2.12.7"
   },
   "dependencies": {
