@@ -1,8 +1,8 @@
 // Sources flattened with hardhat v2.12.7 https://hardhat.org
 
-// File @openzeppelinv3/contracts/utils/Context.sol@v3.4.2
+// File @openzeppelin/contracts/utils/Context.sol@v3.4.2
 
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 
 pragma solidity >=0.6.0 <0.8.0;
 
@@ -28,8 +28,7 @@ abstract contract Context {
 }
 
 
-// File @openzeppelinv3/contracts/access/Ownable.sol@v3.4.2
-
+// File @openzeppelin/contracts/access/Ownable.sol@v3.4.2
 
 
 pragma solidity >=0.6.0 <0.8.0;
@@ -99,7 +98,7 @@ abstract contract Ownable is Context {
 }
 
 
-// File @openzeppelinv3/contracts/math/SafeMath.sol@v3.4.2
+// File @openzeppelin/contracts/math/SafeMath.sol@v3.4.2
 
 
 pragma solidity >=0.6.0 <0.8.0;
@@ -316,8 +315,7 @@ library SafeMath {
 }
 
 
-// File @openzeppelinv3/contracts/token/ERC20/IERC20.sol@v3.4.2
-
+// File @openzeppelin/contracts/token/ERC20/IERC20.sol@v3.4.2
 
 
 pragma solidity >=0.6.0 <0.8.0;
@@ -397,8 +395,7 @@ interface IERC20 {
 }
 
 
-// File @openzeppelinv3/contracts/token/ERC20/ERC20.sol@v3.4.2
-
+// File @openzeppelin/contracts/token/ERC20/ERC20.sol@v3.4.2
 
 
 pragma solidity >=0.6.0 <0.8.0;
@@ -705,8 +702,7 @@ contract ERC20 is Context, IERC20 {
 }
 
 
-// File contracts/DUSDFisco.sol
-
+// File contracts/src/DUSDFisco.sol
 
 pragma solidity 0.6.10;
 
@@ -715,6 +711,7 @@ pragma solidity 0.6.10;
  * @author MetaBank SG
  * @notice This is the official smart contract for DUSD ERC20 Tokens on Fisco due to solidity version difference
  * @dev use this to deploy on Fisco BCOS because it uses solidity v0.6.10 which is supported
+ * @dev experimental: version 1.0
  */
 
 
