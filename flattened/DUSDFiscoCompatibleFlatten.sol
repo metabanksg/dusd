@@ -2,7 +2,7 @@
 
 // File @openzeppelin/contracts/GSN/Context.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -20,7 +20,7 @@ contract Context {
     constructor () internal { }
     // solhint-disable-previous-line no-empty-blocks
 
-    function _msgSender() internal view returns (address payable) {
+    function _msgSender() internal view returns (address ) {
         return msg.sender;
     }
 
@@ -33,7 +33,7 @@ contract Context {
 
 // File @openzeppelin/contracts/ownership/Ownable.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -113,7 +113,7 @@ contract Ownable is Context {
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -273,7 +273,7 @@ library SafeMath {
 
 // File @openzeppelin/contracts/token/ERC20/IERC20.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -353,7 +353,7 @@ interface IERC20 {
 
 // File @openzeppelin/contracts/token/ERC20/ERC20.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 
 
@@ -585,7 +585,7 @@ contract ERC20 is Context, IERC20 {
 
 // File @openzeppelin/contracts/token/ERC20/ERC20Detailed.sol@v2.5.1
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.25;
 
 /**
  * @dev Optional functions from the ERC20 standard.
@@ -642,19 +642,18 @@ contract ERC20Detailed is IERC20 {
 // File contracts/src/DUSDFiscoCompatible.sol
 
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.5.13;
+pragma solidity 0.4.25;
 
 /** 
  * @title DUSD smart contract for Fisco BCOS 
  * @author MetaBank SG
  * @notice This is the official smart contract for DUSD ERC20 Tokens on Fisco due to solidity version difference
  * @dev use this to deploy on Fisco BCOS because it uses solidity v0.6.10 which is supported
- * @custom:experimental Version 1.0
  */
 
 
 
-contract DUSD is ERC20, ERC20Detailed, Ownable {
+contract DUSDFiscoCompatibleFlatten is ERC20, ERC20Detailed, Ownable {
 
      constructor(uint256 _initialSupply) ERC20Detailed("DUSD", "DUSD", 18) public {
         _mint(msg.sender, _initialSupply);
