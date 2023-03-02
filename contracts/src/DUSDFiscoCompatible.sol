@@ -6,22 +6,20 @@ pragma solidity 0.5.13;
  * @author MetaBank SG
  * @notice This is the official smart contract for DUSD ERC20 Tokens on Fisco due to solidity version difference
  * @dev use this to deploy on Fisco BCOS because it uses solidity v0.6.10 which is supported
- * @custom:experimental Version 1.0
+ * @dev experimental version 1.1.0 not officially audited and should be used with caution
  */
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/ownership/Ownable.sol";
 
-contract DUSD is ERC20, ERC20Detailed, Ownable {
+contract DUSDFiscoCompatibleFlatten is ERC20, ERC20Detailed, Ownable {
 
-     constructor(uint256 _initialSupply) ERC20Detailed("DUSD", "DUSD", 18) public {
+    /// @notice decimals have been changed to 6 to align with stablecoin standards
+    /// @param _initialSupply to provide an initial suppply for DUSD
+     constructor(uint256 _initialSupply) ERC20Detailed("DUSD", "DUSD", 6) public {
         _mint(msg.sender, _initialSupply);
     }
-
-    // constructor(uint256 _initialSupply) ERC20("DUSD", "DUSD", 18) public {
-    //     _mint(msg.sender, _initialSupply);
-    // }
 
     /// @notice only owner allowed to mint tokens
     /// @param _to is the reciever of the newly minted tokens
