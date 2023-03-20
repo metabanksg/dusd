@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.5.13;
+pragma solidity 0.4.25;
 
 /** 
  * @title DUSD smart contract for Fisco BCOS 
@@ -9,9 +9,9 @@ pragma solidity 0.5.13;
  * @dev experimental version 1.1.0 not officially audited and should be used with caution
  */
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
-import "@openzeppelin/contracts/ownership/Ownable.sol";
+import "../src/OpenZeppelin/ERC20.sol";
+import "../src/OpenZeppelin/ERC20Detailed.sol";
+import "../src/OpenZeppelin/Ownable.sol";
 
 contract DUSDFiscoCompatibleFlatten is ERC20, ERC20Detailed, Ownable {
 

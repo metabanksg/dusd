@@ -1,33 +1,26 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
+const { ethers, upgrades } = require('hardhat')
 
 async function main() {
-  
-  // To determine initial supply multiply by 18 decimals based on Ethereum
+  // define how much to mint for initial supply, example 1 million
   const initialSupply = hre.ethers.utils.parseEther(`${1_000_000}`)
 
+  // deploys proxy DUSD smart contract and initializes the smart contract
+  // Note that initialization can only be executed once and cannot be initialized again after subsequent upgrades
   try {
+    const DUSDFactory = await ethers.getContractFactory('DUSDUpgradable')
+    const DUSD = await upgrades.deployProxy(DUSDFactory, [initialSupply])
+    await DUSD.deployed()
 
-    const DUSDFactory = await hre.ethers.getContractFactory("DUSD");
-    const DUSD = await DUSDFactory.deploy(`${initialSupply}`);
-    await DUSD.deployed();
-
-    // latest deployed contract address is 0x1563C040b5fa86fFAfBdeB17723de88EcBCEd24E
-    console.log(`Successfully deployed to contract address: ${DUSD.address}`);
+    // latest deployed proxy contract address is 0x8B893b7F6283B8Df351c11c37039e2dd96aB9B2D [Goerli: test]
+    console.log(`Successfully deployed to contract address: ${DUSD.address}`)
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
-  
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+  console.error(error)
+  process.exitCode = 1
+})
