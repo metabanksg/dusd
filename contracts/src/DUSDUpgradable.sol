@@ -2,10 +2,10 @@
 pragma solidity 0.8.19;
 
 /**
- * @title Upgradable DUSD smart contract for Ethereum & Fisco BCOS
+ * @title Upgradable DUSD smart contract
  * @author MetaBank SG
- * @notice This is the official upgradable smart contract for DUSD ERC20 Tokens on Fisco
- * @custom:experimental version 1.0.0
+ * @notice This is the official upgradable smart contract for DUSD ERC20 Tokens
+ * @custom:experimental version 1.0.1
  */
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol";

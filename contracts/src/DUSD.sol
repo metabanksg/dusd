@@ -2,30 +2,33 @@
 pragma solidity 0.8.9;
 
 /**
- * @title DUSD smart contract for Ethereum and TRON
+ * @title DUSD smart contract
  * @author MetaBank SG
  * @notice This is the official smart contract for DUSD ERC20 Tokens
- * @custom:experimental Version 1.0
+ * @custom:experimental version 1.0.1
  */
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DUSD is ERC20, Ownable {
+    uint8 immutable DECIMALS;
+
     constructor(
         uint256 _initialSupply,
         string memory tokenName,
         string memory tokenSymbol,
-        uint8 decimals
+        uint8 _decimals
     ) ERC20(tokenName, tokenSymbol) {
-        _mint(msg.sender, _initialSupply * 10 ** decimals());
+        DECIMALS = _decimals;
+        _mint(msg.sender, _initialSupply * 10 ** DECIMALS);
     }
 
     /// @notice based on Stablecoin best practices, uses the decimals of 6
     /// @dev OZ states that this is for display purposes only, will not affect arithmetic of the contract
     /// @return uint8 = the decimal places that will be displayed
-    function decimals() public pure override returns (uint8) {
-        return decimals;
+    function decimals() public view override returns (uint8) {
+        return DECIMALS;
     }
 
     /// @notice only owner allowed to mint tokens

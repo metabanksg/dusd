@@ -20,7 +20,9 @@ interface IMbMaster {
     struct UserStruct {
         address[] tokens;
         mapping(address => TokenBalance) tokenBalance;
+        address eoa;
         bool isMBUser;
+        uint256 dusdBalance;
     }
 
     struct TokenBalance {
@@ -29,21 +31,43 @@ interface IMbMaster {
     }
 
     // =============================================
-    //                  ERRORS
-    // =============================================
-
-    // =============================================
     //                  EVENTS
     // =============================================
 
     event Initialized(address owner);
+    event NewUserRegistered(address _newUser);
+    event EOAChanged(address _oldAddress, address _newAddress);
+    event AdminTokenWithdrawn(
+        string tokenName,
+        address tokenAddr,
+        uint256 _amount
+    );
+    event AdminEthWithdrawn(uint256 amount);
+    event UserTokenDeposited(
+        string tokenName,
+        address tokenAddr,
+        address mbWallet,
+        address eoa,
+        uint256 amount
+    );
+    event UserFiatDeposited(address mbWallet, uint256 amount);
+    event UserTokenWithdrawn(
+        string tokenName,
+        address tokenAddr,
+        address mbWallet,
+        address eoa,
+        uint256 amount
+    );
+
+    /// @notice empty receive function to allow smart contract to hold Native Token(Ethereum)
+    receive() external payable;
 
     // =============================================
     //                  INITIALIZER
     // =============================================
 
     /// @notice initializer can only be executed once upon deployment, will not be re-initiated after contract upgrades
-    /// @dev  *IMPORTANT* initializes ownership to address deployer immediately upon deployment
+    /// @dev initializes ownership to address deployer
     function initialize() external;
 
     // =============================================
@@ -54,6 +78,11 @@ interface IMbMaster {
     /// @dev only owner can access registerNewUser() function
     /// @param _mbWalletAddress = user's new MB wallet address
     function registerNewUser(address _mbWalletAddress) external;
+
+    /// @notice allow for users to re-assign their Externally Owned Wallet, would require a lock down period for security purposes
+    /// @dev only MB wallet users can use showUserBalance() function
+    /// @param _newEoa new Externally Owned Wallet, must not be the same as the current EOA address, otherwise revert transaction
+    function changeEoa(address _newEoa) external;
 
     /// @notice stops all transactions from taking place, which includes withdraw and deposit due to security issues
     /// @dev only owner can pause smart contract
@@ -74,13 +103,14 @@ interface IMbMaster {
     function adminEthWithdraw(uint256 _amount) external;
 
     /// @notice allow users to top up their MB Wallets with stablecoins or swap stablecoins to DUSD on Laos Chain, equalevant to Top Up on mobile app
-    /// @dev requires user to first approve smart contract to
     /// @param _mbWallet = MB Wallet Address
     /// @param _tokenAddr = token Address, would need some form of authentication to verify address belongs to official stablecoin
+    /// @param _eoa = user's externally owned account
     /// @param _amount ? = amount in USD value, meaning every swap requires an oracle or subgraph to receive price feed to convert amount from USD
     function depositTokens(
         address _mbWallet,
         address _tokenAddr,
+        address _eoa,
         uint256 _amount
     ) external;
 
@@ -121,6 +151,12 @@ interface IMbMaster {
     function showUserDusdBalance(
         address _mbWallet
     ) external view returns (uint256);
+
+    /// @notice display user current registered Externally Owned Account
+    /// @dev only MB wallet users can use showUserEoa() function
+    /// @param _mbWallet = MB wallet address
+    /// @return address = user's current EOA address
+    function showUserEoa(address _mbWallet) external view returns (address);
 
     /// @notice checks if user is already a MB user by verifying if balances[msg.sender].isMBUser is true or false
     /// @param _mbWallet = MB wallet address
