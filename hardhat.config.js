@@ -15,6 +15,17 @@ module.exports = {
         },
       },
     ],
+    overrides: {
+      'contracts/src/DUSD.sol': {
+        version: '0.8.9',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 999999,
+          },
+        },
+      },
+    },
   },
   networks: {
     goerli: {
