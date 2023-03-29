@@ -650,7 +650,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
 // File contracts/src/DUSD.sol
 
-pragma solidity 0.8.9;
+pragma solidity ^0.8.0;
 
 /**
  * @title DUSD smart contract for Ethereum and TRON
@@ -660,15 +660,23 @@ pragma solidity 0.8.9;
  */
 
 contract DUSD is ERC20, Ownable {
-    constructor(uint256 _initialSupply) ERC20("DUSD", "DUSD") {
-        _mint(msg.sender, _initialSupply * 10 ** decimals());
+    uint8 immutable DECIMALS;
+
+    constructor(
+        uint256 _initialSupply,
+        string memory tokenName,
+        string memory tokenSymbol,
+        uint8 _decimals
+    ) ERC20(tokenName, tokenSymbol) {
+        DECIMALS = _decimals;
+        _mint(msg.sender, _initialSupply * 10 ** DECIMALS);
     }
 
     /// @notice based on Stablecoin best practices, uses the decimals of 6
     /// @dev OZ states that this is for display purposes only, will not affect arithmetic of the contract
     /// @return uint8 = the decimal places that will be displayed
-    function decimals() public pure override returns (uint8) {
-        return 6;
+    function decimals() public view override returns (uint8) {
+        return DECIMALS;
     }
 
     /// @notice only owner allowed to mint tokens

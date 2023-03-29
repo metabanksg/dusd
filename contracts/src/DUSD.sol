@@ -12,7 +12,12 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DUSD is ERC20, Ownable {
-    constructor(uint256 _initialSupply) ERC20("DUSD", "DUSD") {
+    constructor(
+        uint256 _initialSupply,
+        string memory tokenName,
+        string memory tokenSymbol,
+        uint8 decimals
+    ) ERC20(tokenName, tokenSymbol) {
         _mint(msg.sender, _initialSupply * 10 ** decimals());
     }
 
@@ -20,7 +25,7 @@ contract DUSD is ERC20, Ownable {
     /// @dev OZ states that this is for display purposes only, will not affect arithmetic of the contract
     /// @return uint8 = the decimal places that will be displayed
     function decimals() public pure override returns (uint8) {
-        return 6;
+        return decimals;
     }
 
     /// @notice only owner allowed to mint tokens

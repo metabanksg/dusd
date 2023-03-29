@@ -14,9 +14,13 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 contract DUSDUpgradable is ERC20PermitUpgradeable, OwnableUpgradeable {
     /// @notice initialize function, can only be used once to initialize owner, ERC20 token and initial supply
     /// @param _initSupply is used to determine DUSD initial supply
-    function intialize(uint256 _initSupply) external initializer {
+    function intialize(
+        uint256 _initSupply,
+        string memory tokenName,
+        string memory tokenSymbol
+    ) external initializer {
         __Ownable_init();
-        __ERC20_init("DUSD", "DUSD");
+        __ERC20_init(tokenName, tokenSymbol);
         _mint(msg.sender, _initSupply);
     }
 
