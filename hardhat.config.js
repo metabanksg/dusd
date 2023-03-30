@@ -16,7 +16,7 @@ module.exports = {
       },
     ],
     overrides: {
-      'contracts/src/DUSD.sol': {
+      'contracts/src/fisco/DUSD.sol': {
         version: '0.8.9',
         settings: {
           optimizer: {
@@ -28,8 +28,8 @@ module.exports = {
     },
   },
   networks: {
-    goerli: {
-      url: process.env.GOERLI_URL || '',
+    sepolia: {
+      url: process.env.ALCHEMY_API || '',
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },

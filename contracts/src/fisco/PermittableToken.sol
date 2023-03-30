@@ -12,8 +12,15 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
  */
 
 contract PermittableToken is ERC20Permit, Ownable {
+    /// @notice used to multiply with initial supply and display when decimals() is triggered
     uint8 immutable DECIMALS;
 
+    /// @notice constructor function to initiate tokens upon deployment
+    /// @param _owner = owner of this tokens contract
+    /// @param _tokenName = token name
+    /// @param _tokenSymbol = token symbol, could be the same as token name
+    /// @param _tokenDecimals = token decimal places, best practices are ERC20 = 18, Stablecoin = 6
+    /// @param _tokenInitSupply = token initial supply upon deployment
     constructor(
         address _owner,
         string memory _tokenName,
@@ -21,8 +28,8 @@ contract PermittableToken is ERC20Permit, Ownable {
         uint8 _tokenDecimals,
         uint256 _tokenInitSupply
     ) ERC20(_tokenName, _tokenSymbol) ERC20Permit(_tokenName) {
-        DECIMALS = _tokenDecimals;
         _transferOwnership(_owner);
+        DECIMALS = _tokenDecimals;
         _mint(_owner, _tokenInitSupply * 10 ** DECIMALS);
     }
 

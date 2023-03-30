@@ -3,12 +3,18 @@ const { ethers, upgrades } = require('hardhat')
 async function main() {
   // define how much to mint for initial supply, example 1 million
   const initialSupply = hre.ethers.utils.parseEther(`${1_000_000}`)
+  const tokenName = ''
+  const tokenSymbol = ''
 
   // deploys proxy DUSD smart contract and initializes the smart contract
   // Note that initialization can only be executed once and cannot be initialized again after subsequent upgrades
   try {
     const DUSDFactory = await ethers.getContractFactory('DUSDUpgradable')
-    const DUSD = await upgrades.deployProxy(DUSDFactory, [initialSupply])
+    const DUSD = await upgrades.deployProxy(DUSDFactory, [
+      initialSupply,
+      tokenName,
+      tokenSymbol,
+    ])
     await DUSD.deployed()
 
     // latest deployed proxy contract address is 0x8B893b7F6283B8Df351c11c37039e2dd96aB9B2D [Goerli: test]
