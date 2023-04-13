@@ -8,18 +8,24 @@ pragma solidity 0.8.19;
  * @custom:experimental version 1.0.0
  */
 
-interface IMbMaster {
+interface IMBMaster {
+    // =============================================
+    //                  ERRORS
+    // =============================================
+
+    error AlreadyRegisteredUser();
+    error Unpaused();
+    error InsufficientFunds(uint256 request, uint256 balance);
+    error IncorrectEOA();
+
     // =============================================
     //                  MEMORY
     // =============================================
 
-    /// @notice struct to define a user's balance, EOA and verify if user is MB user.
-    /// @param tokenBalance stores user's total wallet value converted to USD
-    /// @param eoa stores user's externally owned wallet as a whitelist for future transfers
-    /// @param isMBUser verifies if user is a MB wallet user
     struct UserStruct {
         address[] tokens;
         mapping(address => TokenBalance) tokenBalance;
+        uint256 fiatBalance;
         bool isMBUser;
     }
 
@@ -29,17 +35,13 @@ interface IMbMaster {
     }
 
     // =============================================
-    //                  ERRORS
-    // =============================================
-
-    // =============================================
     //                  EVENTS
     // =============================================
 
     event Initialized(address owner);
 
     // =============================================
-    //                  INITIALIZER
+    //                INITIALIZER
     // =============================================
 
     /// @notice initializer can only be executed once upon deployment, will not be re-initiated after contract upgrades
@@ -49,11 +51,6 @@ interface IMbMaster {
     // =============================================
     //              EXTERNAL FUNCTIONS
     // =============================================
-
-    /// @notice register's new user by storing MB Wallet address into smart contract and enabling "isMBUser" to true
-    /// @dev only owner can access registerNewUser() function
-    /// @param _mbWalletAddress = user's new MB wallet address
-    function registerNewUser(address _mbWalletAddress) external;
 
     /// @notice stops all transactions from taking place, which includes withdraw and deposit due to security issues
     /// @dev only owner can pause smart contract
@@ -74,29 +71,15 @@ interface IMbMaster {
     function adminEthWithdraw(uint256 _amount) external;
 
     /// @notice allow users to top up their MB Wallets with stablecoins or swap stablecoins to DUSD on Laos Chain, equalevant to Top Up on mobile app
-    /// @dev requires user to first approve smart contract to
-    /// @param _mbWallet = MB Wallet Address
     /// @param _tokenAddr = token Address, would need some form of authentication to verify address belongs to official stablecoin
     /// @param _amount ? = amount in USD value, meaning every swap requires an oracle or subgraph to receive price feed to convert amount from USD
-    function depositTokens(
-        address _mbWallet,
-        address _tokenAddr,
-        uint256 _amount
-    ) external;
+    function depositTokens(address _tokenAddr, uint256 _amount) external;
 
-    /// @notice deposits value into MB Wallet as user uses fiat to get DUSD tokens on Laos Chain
-    /// @param _mbWallet = MB wallet Address
-    /// @param _amount = amount in USD value
-    function depositFiat(address _mbWallet, uint256 _amount) external;
-
-    /// @notice allow users to withdraw or swap from DUSD to stablecoins based on the amount in USD that users deposited into MB Master Contract
-    /// @dev only MB wallet users can use withdraw() function, otherwise revert transaction
-    /// @param _mbWallet = MB wallet Address
+    /// @notice allow users to withdraw tokens
     /// @param _eoa = user's Externally Owned Wallet, needs to be whitelisted in balances[msg.sender].Eoa otherwise revert
     /// @param _tokenAddr = token Address, would need some form of authentication to verify address belongs to official stablecoin
     /// @param _amount ? = amount in USD value, meaning every swap requires an oracle or subgraph to receive price feed to convert amount from USD
     function withdrawTokens(
-        address _mbWallet,
         address _eoa,
         address _tokenAddr,
         uint256 _amount
@@ -113,16 +96,4 @@ interface IMbMaster {
     function showUserTokenBalance(
         address _mbWallet
     ) external view returns (TokenBalance[] memory);
-
-    /// @notice displays user balance on mobile app, Note: user will not see their MBWallet address, just balance and EOAWallet
-    /// @dev only MB wallet users can use showUserDusdBalance() function
-    /// @param _mbWallet = MB wallet address
-    /// @return uint256 = Balance of DUSD in value
-    function showUserDusdBalance(
-        address _mbWallet
-    ) external view returns (uint256);
-
-    /// @notice checks if user is already a MB user by verifying if balances[msg.sender].isMBUser is true or false
-    /// @param _mbWallet = MB wallet address
-    function checkExistingUser(address _mbWallet) external view returns (bool);
 }
