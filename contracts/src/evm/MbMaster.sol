@@ -8,7 +8,7 @@ pragma solidity 0.8.19;
  * @custom:experimental version 1.0.0
  */
 
-import "./interfaces/IMbMaster.sol";
+import "../interfaces/IMbMaster.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
