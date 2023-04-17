@@ -16,7 +16,7 @@ module.exports = {
       },
     ],
     overrides: {
-      'contracts/src/fisco/DUSD.sol': {
+      'contracts/src/fisco/Tokens.sol': {
         version: '0.8.9',
         settings: {
           optimizer: {
