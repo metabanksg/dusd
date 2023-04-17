@@ -25,6 +25,33 @@ module.exports = {
           },
         },
       },
+      'contracts/src/fisco/ERC20Factory.sol': {
+        version: '0.8.9',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 999999,
+          },
+        },
+      },
+      'contracts/src/fisco/PermittableToken.sol': {
+        version: '0.8.9',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 999999,
+          },
+        },
+      },
+      'contracts/src/fisco/interfaces/IERC20Factory.sol': {
+        version: '0.8.9',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 999999,
+          },
+        },
+      },
     },
   },
   networks: {
