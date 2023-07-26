@@ -678,9 +678,9 @@ pragma solidity 0.4.25;
 
 
 
-contract DUSDFiscoCompatibleFlatten is ERC20, ERC20Detailed, Ownable, Pausable {
+contract DUSDFiscoCompatibleFlattenUpdate is ERC20, ERC20Detailed, Ownable, Pausable {
     mapping(address => bool) public blacklist;
-    
+
      constructor(uint256 _initialSupply) ERC20Detailed("DUSD", "DUSD", 18) public {
         _mint(msg.sender, _initialSupply);
     }
