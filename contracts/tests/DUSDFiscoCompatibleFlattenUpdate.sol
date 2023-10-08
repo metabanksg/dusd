@@ -712,8 +712,6 @@ contract DUSDFiscoCompatibleFlattenUpdate is ERC20, ERC20Detailed, Ownable, Paus
     /// @notice allows the contract owner to unpause the contract, returns to normal state
     function unpause() onlyOwner whenPaused public {
         paused = false;
-
-        
         emit Unpause();
     }
 
