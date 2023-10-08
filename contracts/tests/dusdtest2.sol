@@ -193,9 +193,9 @@ library SafeMath {
      */
     function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
         unchecked {
-            
-            
-            
+
+
+
             if (a == 0) return (true, 0);
             uint256 c = a * b;
             if (c / a != b) return (false, 0);
@@ -556,8 +556,8 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
         unchecked {
             _balances[from] = fromBalance - amount;
-            
-            
+
+
             _balances[to] += amount;
         }
 
@@ -582,7 +582,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
         _totalSupply += amount;
         unchecked {
-            
+
             _balances[account] += amount;
         }
         emit Transfer(address(0), account, amount);
@@ -610,7 +610,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
         unchecked {
             _balances[account] = accountBalance - amount;
-            
+
             _totalSupply -= amount;
         }
 
@@ -772,7 +772,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
     mapping(address => bool) public isOwner;
     uint public numConfirmationsRequired;
     uint public signatureAmount;
-    
+
     mapping(uint => mapping(address => bool)) public isConfirmed;
     mapping(address => bool) public blacklist;
 
@@ -824,7 +824,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         for (uint i = 0; i < _owners.length; i++) {
             address owner = _owners[i];
             require(owner != address(0), "invalid owner");
-            require(!isOwner[owner], "owner not unique"); 
+            require(!isOwner[owner], "owner not unique");
             isOwner[owner] = true;
             owners.push(owner);
         }
@@ -832,7 +832,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         numConfirmationsRequired = _numConfirmationsRequired;
         _mint(msg.sender, _initialSupply);
     }
-    
+
     function addOwner(address newOwner) external onlyPrimaryOwner {
         require(newOwner != address(0), "Invalid owner address");
         require(!isOwner[newOwner], "Owner already exists");
@@ -840,11 +840,12 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         isOwner[newOwner] = true;
         owners.push(newOwner);
     }
-    
+
     function removeOwner(address ownerToRemove) external onlyPrimaryOwner {
         require(ownerToRemove != owners[0], "Primary owner cannot be removed");
         require(isOwner[ownerToRemove], "Owner does not exist");
-        require(_numConfirmationsRequired <= _owners.length - 1, "invalid number of required confirmations");
+        require(owners.length - 1 > 2, "owners required");
+        require(numConfirmationsRequired <= owners.length - 1, "invalid number of required confirmations");
 
         isOwner[ownerToRemove] = false;
 
@@ -862,15 +863,13 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         numConfirmationsRequired = _newNumConfirmationsRequired;
     }
 
-    
-    
     function updateSignatureAmount(uint256 _newSignatureAmount) external onlyPrimaryOwner {
         require(_newSignatureAmount > 0, "Invalid signature amount required");
         signatureAmount = _newSignatureAmount;
     }
 
     function submitTransaction(address _to, uint _value, bytes memory _data) public onlyMultiOwner {
-        
+
         require(!blacklist[msg.sender], "Sender address is blacklisted");
         require(!blacklist[_to], "Recipient address is blacklisted");
         uint txIndex = transactions.length;
@@ -885,7 +884,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         );
         emit SubmitTransaction(msg.sender, txIndex, _to, _value, _data);
     }
-    
+
     function confirmTransaction(uint _txIndex) public onlyMultiOwner txExists(_txIndex) notExecuted(_txIndex) notConfirmed(_txIndex) {
         Transaction storage transaction = transactions[_txIndex];
         transaction.numConfirmations += 1;
@@ -893,13 +892,13 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
 
         emit ConfirmTransaction(msg.sender, _txIndex);
     }
-    
+
     function executeTransaction(uint _txIndex) public onlyMultiOwner txExists(_txIndex) notExecuted(_txIndex) {
         Transaction storage transaction = transactions[_txIndex];
-        
+
         if (transaction.value >= signatureAmount) {
             require(transaction.numConfirmations >= numConfirmationsRequired, "cannot execute tx");
-        } 
+        }
         transaction.executed = true;
         (bool success, ) = transaction.to.call{value: transaction.value}(
             transaction.data
@@ -950,24 +949,24 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         emit Burn(msg.sender, _amount);
         emit BalanceUpdated(msg.sender, balanceOf(msg.sender));
     }
-    
+
     function updatePrice(uint256 _price) external onlyPrimaryOwner {
         emit PriceUpdated(_price);
     }
-    
+
     function pause() onlyPrimaryOwner whenNotPaused public {
         _pause();
     }
-    
+
     function unpause() onlyPrimaryOwner whenPaused public {
         _unpause();
     }
-    
+
     function addToBlacklist(address _address) external onlyPrimaryOwner {
         require(!isOwner[_address], "Owner are not allowed to blacklist");
         blacklist[_address] = true;
     }
-    
+
     function removeFromBlacklist(address _address) external onlyPrimaryOwner {
         blacklist[_address] = false;
     }
