@@ -193,9 +193,6 @@ library SafeMath {
      */
     function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
         unchecked {
-
-
-
             if (a == 0) return (true, 0);
             uint256 c = a * b;
             if (c / a != b) return (false, 0);
@@ -556,8 +553,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
         unchecked {
             _balances[from] = fromBalance - amount;
-
-
             _balances[to] += amount;
         }
 
