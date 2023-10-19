@@ -15,6 +15,7 @@ contract dusd_metabank is ERC20, Ownable, Pausable {
     mapping(address => bool) public isOwner;
     uint public numConfirmationsRequired;
     uint public signatureAmount;
+    address public aggregateAccount;
 
     mapping(uint => mapping(address => bool)) public isConfirmed;
     mapping(address => bool) public blacklist;
@@ -101,6 +102,10 @@ contract dusd_metabank is ERC20, Ownable, Pausable {
         }
     }
 
+    function setAggregateAccount(address account) public onlyPrimaryOwner {
+        aggregateAccount = account;
+    }
+
     function updateRequiredConfirmations(uint256 _newNumConfirmationsRequired) external onlyPrimaryOwner {
         require(_newNumConfirmationsRequired > 1 && _newNumConfirmationsRequired <= owners.length, "Invalid number of required confirmations");
         numConfirmationsRequired = _newNumConfirmationsRequired;
@@ -118,12 +123,12 @@ contract dusd_metabank is ERC20, Ownable, Pausable {
         uint txIndex = transactions.length;
         transactions.push(
             Transaction({
-        to: _to,
-        value: _value,
-        data: _data,
-        executed: false,
-        numConfirmations: 0
-        })
+                to: _to,
+                value: _value,
+                data: _data,
+                executed: false,
+                numConfirmations: 0
+            })
         );
         emit SubmitTransaction(msg.sender, txIndex, _to, _value, _data);
     }
@@ -173,15 +178,16 @@ contract dusd_metabank is ERC20, Ownable, Pausable {
         Transaction storage transaction = transactions[_txIndex];
 
         return (
-        transaction.to,
-        transaction.value,
-        transaction.data,
-        transaction.executed,
-        transaction.numConfirmations
+            transaction.to,
+            transaction.value,
+            transaction.data,
+            transaction.executed,
+            transaction.numConfirmations
         );
     }
 
     function mint(address _to, uint256 _amount) external onlyPrimaryOwner {
+        require(_to == aggregateAccount, "Can only mint to the specified account");
         _mint(_to, _amount);
         emit Mint(_to, _amount);
         emit BalanceUpdated(_to, balanceOf(_to));
