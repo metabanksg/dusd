@@ -767,6 +767,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
     mapping(address => bool) public isOwner;
     uint public numConfirmationsRequired;
     uint public signatureAmount;
+    address public aggregateAccount;
 
     mapping(uint => mapping(address => bool)) public isConfirmed;
     mapping(address => bool) public blacklist;
@@ -812,7 +813,7 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
     event Mint(address indexed to, uint256 amount);
     event Burn(address indexed from, uint256 amount);
 
-    constructor(uint256 _initialSupply, address[] memory _owners, uint256 _numConfirmationsRequired, uint256 _signatureAmount) ERC20("DUSD2", "DUSD2", 6) {
+    constructor(uint256 _initialSupply, address[] memory _owners, uint256 _numConfirmationsRequired, uint256 _signatureAmount) ERC20("DUSD", "DUSD", 6) {
         require(_owners.length > 2, "owners required");
         require(_numConfirmationsRequired > 1 && _numConfirmationsRequired <= _owners.length, "invalid number of required confirmations");
         require(_signatureAmount > 0, "Invalid signature amount required");
@@ -853,6 +854,10 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         }
     }
 
+    function setAggregateAccount(address account) public onlyPrimaryOwner {
+        aggregateAccount = account;
+    }
+
     function updateRequiredConfirmations(uint256 _newNumConfirmationsRequired) external onlyPrimaryOwner {
         require(_newNumConfirmationsRequired > 1 && _newNumConfirmationsRequired <= owners.length, "Invalid number of required confirmations");
         numConfirmationsRequired = _newNumConfirmationsRequired;
@@ -870,12 +875,12 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         uint txIndex = transactions.length;
         transactions.push(
             Transaction({
-                to: _to,
-                value: _value,
-                data: _data,
-                executed: false,
-                numConfirmations: 0
-            })
+        to: _to,
+        value: _value,
+        data: _data,
+        executed: false,
+        numConfirmations: 0
+        })
         );
         emit SubmitTransaction(msg.sender, txIndex, _to, _value, _data);
     }
@@ -925,15 +930,16 @@ contract dusd_fisco2 is ERC20, Ownable, Pausable {
         Transaction storage transaction = transactions[_txIndex];
 
         return (
-            transaction.to,
-            transaction.value,
-            transaction.data,
-            transaction.executed,
-            transaction.numConfirmations
+        transaction.to,
+        transaction.value,
+        transaction.data,
+        transaction.executed,
+        transaction.numConfirmations
         );
     }
 
     function mint(address _to, uint256 _amount) external onlyPrimaryOwner {
+        require(_to == aggregateAccount, "Can only mint to the specified account");
         _mint(_to, _amount);
         emit Mint(_to, _amount);
         emit BalanceUpdated(_to, balanceOf(_to));
