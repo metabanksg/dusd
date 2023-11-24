@@ -24,7 +24,7 @@ contract EVEGold is IERC20, Ownable {
     //每年的天数
     uint256 private constant YEAR = 365;
 
-    //存储费用分母
+    //存储费用分母 0.25%/每年
     uint256 private constant STORAGE_FEE_DENOMINATOR = 40000000000;
 
     //在经过一天后需要支付存储费用的最低余额：
@@ -436,7 +436,7 @@ contract EVEGold is IERC20, Ownable {
     }
 
     /**
- * @dev 计算清除地址余额所需的金额，包括欠款的存储费
+     * @dev 计算清除地址余额所需的金额，包括欠款的存储费
      * @param account 要检查的地址
      * @return 一个表示地址可用于发送的总金额的 uint256 值
      */
@@ -542,7 +542,7 @@ contract EVEGold is IERC20, Ownable {
         uint256 balanceFromBefore = _balances[from];
         uint256 balanceToBefore = _balances[to];
 
-        // 如果不是自己转账，则需要支付接收方的转账费用和存储费用
+        // 如果不是自己转账，则需要支付接收方的存储费用
         if (from != to) {
             // 如果不是自己转账，则接收方需要存储费用
             storageFeeTo = calcStorageFee(to);
