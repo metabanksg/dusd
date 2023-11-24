@@ -99,9 +99,9 @@ contract EVEGold is IERC20, Ownable {
     }
 
     /**
- * @dev 将账户设置为免除所有费用。这可以在特殊情况下用于由EVE、交易所等拥有的冷存储地址。
+     * @dev 将账户设置为免除所有费用。这可以在特殊情况下用于由EVE、交易所等拥有的冷存储地址。
      * @param account 要免除存储费用的账户
-     */
+    */
     function setFeeExempt(address account) public onlyOwner {
         _storageFeeExempt[account] = true;
     }
@@ -115,10 +115,10 @@ contract EVEGold is IERC20, Ownable {
     }
 
     /**
-    * @dev 给指定地址转账token
-   * @param to 要传输到的地址。
-   * @param value 要转账的金额。
-   */
+     * @dev 给指定地址转账token
+     * @param to 要传输到的地址。
+     * @param value 要转账的金额。
+    */
     function transfer(address to, uint256 value) external returns (bool) {
         _transfer(msg.sender, to, value);
         return true;
@@ -135,7 +135,7 @@ contract EVEGold is IERC20, Ownable {
     }
 
     /**
- * @dev 从一个地址向另一个地址转移代币。
+     * @dev 从一个地址向另一个地址转移代币。
      * 注意，虽然此函数会触发Approval事件，但根据规范并不需要，其他符合规范的实现可能不会触发该事件。
      * 还要注意，即使没有显式检查余额要求，任何超过批准金额的转账尝试都会由于SafeMath将批准减去负余额而自动失败。
      * @param from 要发送代币的地址。
@@ -590,7 +590,7 @@ contract EVEGold is IERC20, Ownable {
     }
 
     /**
- * @dev 对转账地址的限制规则进行强制执行
+     * @dev 对转账地址的限制规则进行强制执行
      * @param to 发送地址
      * @param from 接收地址
      */
