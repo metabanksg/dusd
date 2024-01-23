@@ -68,14 +68,6 @@ contract vote {
         return candidate.votes; // 返回候选人的得票数
     }
 
-    function hasVotedWithDID(string memory did) public view returns (bool) {
-        return didVoted[did]; // 返回DID是否已投票
-    }
-
-    function hasVotedWithAddress(address addressVote) public view returns (bool) {
-        return hasVoted[addressVote]; // 返回地址是否已投票
-    }
-
     //返回所有候选人信息
     function getAllCandidates() public view returns (Candidate[] memory) {
         Candidate[] memory allCandidates = new Candidate[](nextCandidateId - 1);
