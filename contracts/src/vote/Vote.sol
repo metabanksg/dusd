@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
 
-contract vote {
+contract Vote {
 
     struct Candidate {
         uint256 id;
@@ -34,15 +34,18 @@ contract vote {
     //增加候选人
     function addCandidate(string memory candidateName) public onlyChairperson returns (uint256) {
         require(nextCandidateId <= totalCandidates, "The number of candidates has reached the upper limit"); // 确保候选人数量未超过上限
+        require(bytes(candidateName).length > 0, "Candidate name cannot be empty");
 
-        Candidate storage candidate = candidates[nextCandidateId];
-        candidate.id = nextCandidateId;
-        candidate.name = candidateName;
-        candidate.votes = 0;
+        // 判断候选人姓名是否已存在
+        for (uint256 i = 1; i < nextCandidateId; i++) {
+            require(keccak256(bytes(candidates[i].name)) != keccak256(bytes(candidateName)), "Candidate name already exists");
+        }
 
-        nextCandidateId++; // 更新下一个候选人的ID
+        candidates[nextCandidateId] = Candidate(nextCandidateId, candidateName, 0);
+        uint256 cId = nextCandidateId;
+        nextCandidateId++;
 
-        return candidate.id; // 返回候选人ID
+        return cId; // 返回候选人ID
     }
 
     function voting(uint256 candidateId, string memory did) public returns (bool) {
